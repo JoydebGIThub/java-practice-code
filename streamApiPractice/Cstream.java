@@ -13,5 +13,12 @@ public class Cstream {
             .filter(v -> v == 2)
             .findFirst();
         System.err.println(value.get());
+        
+        int value2= list
+            .stream()
+            .filter(v -> v == 2)
+            .findFirst().get();
+       
+        System.err.println(value2);
     }
 }
