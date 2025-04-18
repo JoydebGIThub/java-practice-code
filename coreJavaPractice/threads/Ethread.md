@@ -247,3 +247,96 @@ public class Ethread6 {
     
 ```
 ***
+
+## Deadlock
+```
+    1. Deadlock is a situation where two or more "threads" are blocked indefinitely, waiting for each other to "release" thre resources that they need.
+```
+```java
+
+package coreJavaPractice.threads;
+
+public class Ethread7 {
+    public static void main(String[] args) {
+        final String resource1= "Resource1";
+        final String resource2= "Resource1";
+
+        Thread t1= new Thread(()->{
+            synchronized(resource1){
+                System.out.println("Thread 1 locked resource 1");
+                try {
+                    Thread.sleep(100);
+                } catch (Exception e) {
+                }
+                synchronized(resource2){
+                    System.out.println("Thread 1 locked recource 2");
+                }
+            }
+        });
+
+        Thread t2= new Thread(()->{
+            synchronized(resource2){
+                System.out.println("Thread 2 locked resource 2");
+                try {
+                    Thread.sleep(100);
+                } catch (Exception e) {
+                }
+                synchronized(resource1){
+                    System.out.println("Thread 2 locked recource 1");
+                }
+            }
+        });
+
+        t1.start();
+        t2.start();
+    }
+}
+
+```
+
+### Output:
+```
+Thread 2 locked resource 2
+Thread 2 locked recource 1
+Thread 1 locked resource 1
+Thread 1 locked recource 2
+```
+
+## ExecutorService (Thread Pool)
+```
+    1. The ExecutorService in Java is a framework provided by the java.util.concurrent package that simplifies the process of executing tasks asynchronously using a thread pool. Instead of manually managing threads, you can submit tasks to an ExecutorService, which handles thread lifecycle and queuing efficiently.
+    2. Manages a pool of threads efficiently.
+    3. Avoids thread creation overhead for each task.
+    4. Supports task scheduling and lifecycle management.
+    5. Helps avoid resource leaks by properly shutting down threads.
+```
+
+```java
+package coreJavaPractice.threads;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class Ethread8 {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+
+        for (int i = 0; i <=5; i++) {
+            executor.submit(()->{
+                System.out.println("Thread "+Thread.currentThread().getName()+" is running");
+            });
+        }
+        executor.shutdown();
+    }
+}
+
+```
+### Output:
+```
+Thread pool-1-thread-3 is running
+Thread pool-1-thread-1 is running
+Thread pool-1-thread-2 is running
+Thread pool-1-thread-2 is running
+Thread pool-1-thread-3 is running
+Thread pool-1-thread-1 is running
+```
