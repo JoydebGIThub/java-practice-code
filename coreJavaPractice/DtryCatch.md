@@ -394,3 +394,39 @@ public class DtryCatchMyUnchecked {
 ```
 Caught Custom Unchecked Exception: Marks can't be negative
 ```
+
+***
+## Try-with-resources block
+```java
+package coreJavaPractice;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+
+public class DtryWithRecource {
+    public static void main(String[] args) {
+        String filePath="example.txt";
+
+        try (BufferedReader br=new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine())!=null) {
+                System.out.println(line);
+            }
+        } catch (Exception e) {
+            System.out.println("IOException: "+e.getMessage());
+        }
+    }
+}
+
+```
+### Output:
+```
+IOException: example.txt (The system cannot find the file specified)
+```
+
+### Key Points:
+```
+    1. BufferedReader and FileReader both implement "Closeable".
+    2. No need to "explicitly" call br.close() -> it's done automatically
+    3. Great for managing file, DB, or network resources safely and cleanly 
+```
