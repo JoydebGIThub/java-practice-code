@@ -1,4 +1,4 @@
-package coreJavaPractice;
+package coreJavaPractice.exceptions;
 
 class Testing{
     static{

@@ -1,4 +1,4 @@
-package coreJavaPractice;
+package coreJavaPractice.exceptions;
 
 public class DtryCatchNullpointer {
     public static void main(String[] args) {

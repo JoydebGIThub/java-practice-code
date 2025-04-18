@@ -1,4 +1,4 @@
-package coreJavaPractice;
+package coreJavaPractice.exceptions;
 
 class MyUnCheckedException extends RuntimeException{
     public MyUnCheckedException(String message){

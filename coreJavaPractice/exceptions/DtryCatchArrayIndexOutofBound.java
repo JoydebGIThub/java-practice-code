@@ -1,4 +1,4 @@
-package coreJavaPractice;
+package coreJavaPractice.exceptions;
 
 public class DtryCatchArrayIndexOutofBound {
     public static void main(String[] args) {

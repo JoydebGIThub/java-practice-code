@@ -1,4 +1,4 @@
-package coreJavaPractice;
+package coreJavaPractice.exceptions;
 
 class InvalidAgeException extends Exception{
     public InvalidAgeException(String message){

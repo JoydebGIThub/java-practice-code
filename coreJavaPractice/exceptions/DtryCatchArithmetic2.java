@@ -1,4 +1,4 @@
-package coreJavaPractice;
+package coreJavaPractice.exceptions;
 
 public class DtryCatchArithmetic2 {
     public static void main(String[] args) {

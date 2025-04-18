@@ -1,4 +1,4 @@
-package coreJavaPractice;
+package coreJavaPractice.exceptions;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
