@@ -59,3 +59,32 @@ class Point{
     }
 }
 ```
+
+## Explain the memory model in Java. What are heap and stack memory?
+```
+The Java Memory Model (JMM) isn't a physical memory layout but rather a specification that defines how threads in Java interact with the computer's memory. It governs things like:
+```
+- Visibility: When changes made by one thread to shared variables are visible to other threads.
+- Ordering: The rules that determine the order in which operations in different threads can appear to execute.
+- Atomicity: Ensuring that operations appear to happen as a single, indivisible unit.
+```
+When a Java program runs, the JVM manages various memory areas. The two most frequenty discussed and essential ones are the "Heap" and the "Stack".
+```
+1. Heap Memory:
+   - Purpose: The Heap is the runtime data area where "objects (instance of classes)" and their corresponding instance variables are allocated. It's also where arrays are stored.
+   - Characteristics:
+     - Shared: All threads in a Java application share the same Heap memory.
+     - Dynamic Allocation: Memory for objects is allocated dynamically when the "new" keyword is used.
+     - Garbage Collection: The Heap is managed by the JVM's garbage collector. Objects that are no longer referenced by any live part of the program become eligible for garbage colloction, and their memory is reclaimed.
+     - Size: Th size of the Heap can be configured at JVM startup using flags like "-Xms (initial heap size)" and "-Xmx (maximum heap size)".
+     - Organization (Generational GC): For efficient garbage collection, the Heap is often logically divided into generations (Young Generation, Old Generation, Permanent Generation/Metaspace - through the latter has evolved)
+    - Analogy: Imagine a large shared warehouse where you can store various items(objects). Anyone working in the warehouse (threads) can access these items. When an item is no longer needed, the cleanup crew (garbage collector) comes and removes it to make space.
+2. Stack Memory:
+   - Purpose: Java Stack memory is used for "method execution" and storing "local variables", "method parameters" and the "execution context (like the current line of code being executed)". Each thread in a Java application has its own private JVM Stack.
+   - Characteristics:
+         - Thread-Local: Each thread has its own separate Stack. Data stored in one thread's stack is not accessible to other threads.
+         - LIFO (Last-In, First-Out): Method calls and local variables are pushed into the stack when a method is entered, and they are popped off when the method completes.
+         - Automatic Allocation and Deallocation: Memory for local variables and method frames is automatically allocated when a method is called and deallocated when the method returns.
+         - Size: The size of each thread's Stack can be configured using the "-Xss" JVM flag.
+         - StackOverflowError: If a thread's Stack exceeds its allocated size (Often due to deep or infinite recursion), a "StackOverflowError" is thrown.
+    - Analogy: Think of a stack of plates where each plate represents a method call. When you call a method, a new plate is added to the top. Local variables and other method-specific information are kept on the plate. When the method finishes, the plate is removed. Each worker (thread) has their own stack of plates.
