@@ -94,3 +94,28 @@ public class Test {
 ```
 ilkejav
 ```
+### Using set
+```java
+import java.util.*;
+class Main {
+    public static void main(String[] args) {
+        System.out.println("Try programiz.pro");
+        String a= "I like Java";
+        a=a.toLowerCase();
+        a=a.replace(" ","");
+        Set<Character> l= new LinkedHashSet<>();
+        for(int i=0; i<a.length();i++){
+            char ch= a.charAt(i);
+            l.add(ch);
+            // System.out.println(ch);
+        }
+        System.out.println(l);
+    }
+    
+}
+```
+
+### Output
+```
+[i, l, k, e, j, a, v]
+```
