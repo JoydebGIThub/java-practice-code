@@ -91,14 +91,24 @@ When a Java program runs, the JVM manages various memory areas. The two most fre
 ***
 ## Q: What is the difference between checked and unchecked exceptions?
 ### Checked Exception:
-    - Definition: Checked exception are exceptions that the compiler forces you to handle (either by catching them in a "try-catch" block or declaring them in the "throws" clause of the method signature).
-    - Inheritance: They are subclasses of the "Exception" class, excluding "RuntimeException".
-    - Compiled-Time Check: The compiler verifies if you code handles these exceptions. If you don't you'll get a compile-time error.
-    - Intent: They typically represent exceptional conditions that are reasonably predictable and recoverable, often related to external resources or environmental issues ("IOException" when dealing with files, "SQLException" when interaction with databases). The API designers expect you to anticipate and handle these situations gracefully.
+- Definition: Checked exception are exceptions that the compiler forces you to handle (either by catching them in a "try-catch" block or declaring them in the "throws" clause of the method signature).
+- Inheritance: They are subclasses of the "Exception" class, excluding "RuntimeException".
+- Compiled-Time Check: The compiler verifies if you code handles these exceptions. If you don't you'll get a compile-time error.
+- Intent: They typically represent exceptional conditions that are reasonably predictable and recoverable, often related to external resources or environmental issues ("IOException" when dealing with files, "SQLException" when interaction with databases). The API designers expect you to anticipate and handle these situations gracefully.
 ### Unchecked Exceptions:
-    - Definition: Unchecked exceptions are exceptions that the compiler does not force you to handle. You can catch them if you want, but you're not required to.
-    - Inheritance: They are subclasses of the "RuntimeException" class (and Error).
-    - Runtime Check: These exceptions typically occur due to programming error or unexpected runtime conditions that are often dificult or impractical to anticipate and recover from in the general flow of the program.
-    - Intent: They usually indicate bugs in your code (e.g, NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException). The philosophy is that trying to handle every potential occurrence of these world lead to overly verbose and less readabke code. It's generally better to fix the underlying bug. "Error" subclasses usually represent serious JVM problems that applications typically shouldn't try to handle (OutOfMemoryError, StackOverflowError).
+- Definition: Unchecked exceptions are exceptions that the compiler does not force you to handle. You can catch them if you want, but you're not required to.
+- Inheritance: They are subclasses of the "RuntimeException" class (and Error).
+- Runtime Check: These exceptions typically occur due to programming error or unexpected runtime conditions that are often dificult or impractical to anticipate and recover from in the general flow of the program.
+- Intent: They usually indicate bugs in your code (e.g, NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException). The philosophy is that trying to handle every potential occurrence of these world lead to overly verbose and less readabke code. It's generally better to fix the underlying bug. "Error" subclasses usually represent serious JVM problems that applications typically shouldn't try to handle (OutOfMemoryError, StackOverflowError).
 ***
-
+## Q: How does Java handle memory management and garbage collection?
+```
+Java employs and "automatic memory management system", primarily through its "garbage collector". This significantly reduces burden on developers comared to languages like C/C++ where manual memory allocation and dealloaction are required.
+```
+### Memory Management in Java:
+1. JVM's Role: The Java Virtual Machine is responsible for allocating and deallocating memory duing the execution of a Java program. It manages different memory areas, mostly notably the "Heap" and the "Stack":
+   - Heap: This is where objects (instances of classes) and arrays are allocated. It's a shared memory area among all threads.
+   - Stack: Each thread has its own private stack, used for storing local variables, method parameters, and the call stack. Memory allocation and deallocation on the stack are automatic and tied to the lifecycle of the method calls.
+2. Automatic Allocation: When you create a new object using the "new" keyword, the JVM automatically allocates space for it on the Heap.
+3. Garbage Collection (GC): The Core of Automatic Deallocation: The key to Java's automatic memory management is the garbage collector. It's a background process that identifies and reclaims memory occupied by objects that are no longer reachable by any live part of the application.
+***
