@@ -59,8 +59,8 @@ class Point{
     }
 }
 ```
-
-## Explain the memory model in Java. What are heap and stack memory?
+***
+## Q: Explain the memory model in Java. What are heap and stack memory?
 ```
 The Java Memory Model (JMM) isn't a physical memory layout but rather a specification that defines how threads in Java interact with the computer's memory. It governs things like:
 ```
@@ -88,3 +88,17 @@ When a Java program runs, the JVM manages various memory areas. The two most fre
          - Size: The size of each thread's Stack can be configured using the "-Xss" JVM flag.
          - StackOverflowError: If a thread's Stack exceeds its allocated size (Often due to deep or infinite recursion), a "StackOverflowError" is thrown.
     - Analogy: Think of a stack of plates where each plate represents a method call. When you call a method, a new plate is added to the top. Local variables and other method-specific information are kept on the plate. When the method finishes, the plate is removed. Each worker (thread) has their own stack of plates.
+***
+## Q: What is the difference between checked and unchecked exceptions?
+### Checked Exception:
+    - Definition: Checked exception are exceptions that the compiler forces you to handle (either by catching them in a "try-catch" block or declaring them in the "throws" clause of the method signature).
+    - Inheritance: They are subclasses of the "Exception" class, excluding "RuntimeException".
+    - Compiled-Time Check: The compiler verifies if you code handles these exceptions. If you don't you'll get a compile-time error.
+    - Intent: They typically represent exceptional conditions that are reasonably predictable and recoverable, often related to external resources or environmental issues ("IOException" when dealing with files, "SQLException" when interaction with databases). The API designers expect you to anticipate and handle these situations gracefully.
+### Unchecked Exceptions:
+    - Definition: Unchecked exceptions are exceptions that the compiler does not force you to handle. You can catch them if you want, but you're not required to.
+    - Inheritance: They are subclasses of the "RuntimeException" class (and Error).
+    - Runtime Check: These exceptions typically occur due to programming error or unexpected runtime conditions that are often dificult or impractical to anticipate and recover from in the general flow of the program.
+    - Intent: They usually indicate bugs in your code (e.g, NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException). The philosophy is that trying to handle every potential occurrence of these world lead to overly verbose and less readabke code. It's generally better to fix the underlying bug. "Error" subclasses usually represent serious JVM problems that applications typically shouldn't try to handle (OutOfMemoryError, StackOverflowError).
+***
+
