@@ -112,3 +112,92 @@ Java employs and "automatic memory management system", primarily through its "ga
 2. Automatic Allocation: When you create a new object using the "new" keyword, the JVM automatically allocates space for it on the Heap.
 3. Garbage Collection (GC): The Core of Automatic Deallocation: The key to Java's automatic memory management is the garbage collector. It's a background process that identifies and reclaims memory occupied by objects that are no longer reachable by any live part of the application.
 ***
+## Q: What are volatile, synchronized and transient keywords?
+1. volatile Keyword:
+   - Purpose: The "volatile" keyword is applied to "instance variables". It ensures that all threads see the most up-to-date value of the variable. It addresses the "visibility problem" in "multithreaded environments".
+   - How it works:
+     - When a variable is declared "volatile", the JVM ensures that every read of the variable will be directly from the main memory, and every write to the variable will be immediately fluched back to the main memory.
+     - It prevents threads from holding a local, cached copy of the variable that might become stale.
+   - Important Note: "volatile" only guarantees "visibility" (that changes are seen by other threads). It does not guarantee "atomicity" for compound operation (like incrementing "i++" which involves read, modify, write). For atomic operations, you'd typically need "synchronized" or "java.util.concurrent" classes.
+   - Use Cases: Status flags, simple counters, or variables where immediate visibility of changes across threads in crucial.
+```java
+clas SharedResource{
+    public volatile boolean running = true;
+    public void stop(){
+        running= false; //Changes to 'running' will be immediately visible to other threads.
+    }
+
+    public void workerThread(){
+        while(running){
+            //Perform some work
+        }
+        System.out.println("Worker thread stopped");
+    }
+}
+```
+
+2. synchronized Keyword:
+   - Purpose: The "synchronized" keyword is used to control access to shared recources by multiple threads. It provides a mechanism for "mutual exclusion" and also ensures "visibility" of changes made within a synchronized block or method.
+   - How to works:
+     - When a thread enters a "synchronized" method or a "synchronized" block, it acquires a lock on the object (for instance methods or blocks) or the class object (for static methods or blocks).
+     - Only one thread can hold the lock at a time. Other threads trying to enter the same synchronized section will be blocked until the lock is released.
+     - When a thread exits a synchronized section, it releases the lock.
+     - Synchronization also establishes a "happens-before" relationship, ensuring that any changes made within a synchronized block are visible to subsequent threads that acquire the same lock
+    - Use Cases: Protecting critial sections of code where shared data is accessed and modified to prevent "race conditions" and ensure data integrity.
+### Synchronized method
+```java
+class Counter{
+    private int count=0;
+    public synchronized void increment(){
+        count++; //Only one thread can execute this method at a time.
+    }
+
+    public int getCount(){
+        return count;
+    }
+}
+```
+### Synchronized block
+```java
+class SharedList{
+    private java.util.List<String> list= new java.util.ArrayList<>();
+    private final Object lock = new Object();
+
+    public void addItem(String item){
+        synchronized(lock){
+            list.add(item);// Access to the list is synchronized on the 'lock' object.
+        }
+    }
+
+    public String getItem(int index){
+        synchronized(lock){
+            return list.get(index);
+        }
+    }
+}
+```
+
+3. transient Keyword:
+   - Purpose: The "transient" keyword is used to mark instance variables that should "not be serialized" when an object is written to an object stream (during serialization for saving to a file or sending over the network).
+   - How it works: When the default serialization mechanism attempts to save the state of an object, it will "skip over" any fields declared as "transient". These fields will not be included in the serialized data. When the object is deserialized, "transient" fields will be initialized to their default values (null for object references, 0 for integers, false for booleans).
+   - Use Case:
+     - Storing sensitive information (like passwords or security keys) that shouldn't be persisted.
+     - Caching values that can be recomputed or are not meaningful after deserialization.
+     - References to non-serializable objects.
+     - Optimizing serialization by excluding large or unnecessary data.
+```java
+import java.io.Serializable;
+class User implements Serializable{
+    private String username;
+    private transient String password; // Password will not be serialized
+    private int loginCount;
+    private transient java.util.Date lastLogin; //Last login time will not be serialized
+
+    public User(String username, String password, int loginCount, java.util.Date lastLogin){
+        this.username=username;
+        this.password=password;
+        this.loginCount=loginCount;
+        this.lastLogin=lastLogin;
+    }
+}
+```
