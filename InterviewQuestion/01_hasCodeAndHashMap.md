@@ -44,3 +44,39 @@ If we override one, we mush override both, otherwise the HashMap may not work co
 ### 🔑 Tips:
 - A good hashCode should be fast and distribute keys evenly.
 - Collisions (when different key have the same hash) are handled by ⛓️ chaining or 📖 open addressing internally.
+
+## Hashtable (Legacy class, key-value pair):
+- A 🔐key-value based collection like HashMap.
+- 🧵Thread-safe(synchronized) - good for multi-threaded environments.
+- 🪹 No null keys or null value allowed.
+- Slower than HashMap due to synchronization.
+- Part of legacy collection classes.
+```java
+Hashtable<Integer, String> table= new Hashtable<>();
+table.put(1, "Apple");
+table.put(2, "Banana");
+
+//table.put(null, "Test");// throws NullPointerException
+System.out.println(table.get(1));
+```
+```java
+ HashMap<Integer, String> h= new HashMap<>();
+h.put(1, "Joydeb");
+h.put(null,"kal");
+System.out.print(h.get(null)); //kal
+```
+
+## HashSet (Collection of unique elements):
+- Stores only 👽unique elements - no duplicates.🧔
+- Implements Set interface.
+- Internally uses a HashMap (keys as elements, values as a dummy constant).
+- Allows one 🪹 null element.
+- Not synchronized (not thread-safe).
+- Unordered - does not maintain insertion order.
+```java
+HashSet<String> set= new HashSet<>();
+set.add("Java");
+set.add("Python");
+set.add("Java"); // Duplicate won't be added
+System.out.println(set);
+```
