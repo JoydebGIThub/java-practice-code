@@ -81,15 +81,16 @@ class Main {
     }
 }
 ```
-### .compareTo() && a.equals()
+### .compareTo() && .equals() && ==
 ```java
 import java.util.*;
 class Main {
     public static void main(String[] args) {
-        String a= "   Joydeb Biswas   ";        
-        String b="Joydeb Biswas";
-        System.out.println("Compare a and b: "+a.compareTo(b));// -42 becaues it false. if true then give 0
-        System.out.println("Check the equals between Strings: "+a.equals(b));// false
+        String a= new String("Joydeb Biswas");        
+        String b= "Joydeb Biswas";
+        System.out.println("Compare a and b: "+a.compareTo(b));// 0 // -42 becaues it false. if true then give 0
+        System.out.println("Check the equals between Strings: "+a.equals(b));// true
+        System.out.println("Check using ==: "+ (a==b)); //false
     }
 }
 ```
