@@ -71,4 +71,36 @@ Both "Runnable" and "Callable" are interfaces that represent tasks that can be e
    - Runnable🏃: Primarily used for executing independent units of work that don't need to return a specific value. Think of tasks like updating a UI, performing background processing without needing a direct outcome, or simple event handling.
    - Callable🤙: Designed for tasks that perform a computation and need to return a result. This is useful for operations like fetching data performing calculations, or any asynchronous task where you need to obtain the outcome.
 5. Lambda Expressions and Functional Interfaces:
-   - 
+   - Runnable🏃 and Callable🤙 as Functional interface: Both Runnable🏃 and Callable🤙 are "functional interfaces" because they have single abstract method(run() and call()), respectively). This means you can use lambda expressions and method references to create instances of these interfaces more concisely in Java 8
+   ```java
+   Runnable runnableOld= new Runnable(){
+      public void run(){
+         System.out.println("Running in a thread (old way)");
+      }
+   };
+   //Java 8 with Lambda
+   Runnable runnable = () => System.out.println("Running in a thread (lambda)");
+   ExecutorService executor= Executors.newSingleThreadExecutor();
+   executor.execute(runnable);
+   executor.shutdown();
+   ```
+   ```java
+   //Before Java 8
+   Callable<String> callableOld = new Callable<String>(){
+      public String call() throws Exception{
+         return "Result from callable (old way)";
+      }
+   }
+   // Java 8 with lambda
+   Callable<String> callableNew = () => "Result from callable(lambda)";
+
+   ExecutorService executor= Executors.newSingleThreadExecutor();
+   Future<String> futureResult = executor.submit(callableNew);
+   try{
+      String result= futureResult.get();
+      System.out.println("Result: "+result);
+   }catch(InterruptedException | ExecutionException e){
+      e.printStackTrace();
+   }
+   executor.shutdown();
+   ```
