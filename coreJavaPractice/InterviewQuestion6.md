@@ -140,9 +140,20 @@ public class FlatMap{
 
     //Another example:
     List<String> words = Arrays.asList("Hello","world");
-    Stream<Character> characters= words.stream().flatMap(word -> word.chars()) // returns an IntStream of character codes
+    Stream<Character> characters= words.stream().flatMap(word -> word.chars() // returns an IntStream of character codes
                                                   .mapToObj(c -> (char) c)); //convert to Stream<Charcter>
     characters.forEach(ch -> System.out.print(ch+" "));
   }
 }
 ```
+#### Breakdown:
+1. listOfLists.stream().flatMap(List::stream):
+   - We have a stream of "List<String>" (a list of lists of strings).
+   - The ".flatMap()" operation takes "List::stream" as the function. For each inner "List<String>", the "stream()" method is called, which produces as "Stream<String>"
+   - ".flatMap()" then takes all these individual "Stream<String>" objects and "flattens" them into a single "Stream<String>". The result is a stream containing "a", "b", "c", "d","e","f".
+2. words.stream().flatMap(word -> word.chars().mapToObj(c-> (char)c)):
+   - We have a stream of "String" objects.
+   - For each "word", the lambda expression does the following:
+     - word.char(): Returns an IntStream of the character code of the characters in the word.
+     - .mapToObj(c -> (char) c): Converts each integer character code back to a "Character" object, resulting in a "Stream<Character>".
+   - .flatMap() then flattens these "Stream<Character>" objects from each word into a single "Stream<Character>" containing all the individual characters.
