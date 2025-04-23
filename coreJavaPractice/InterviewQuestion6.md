@@ -119,3 +119,30 @@ public class MapExample{
 - Type transformation: The type of the elements in the output stream can be different from the type of the elements in the input stream (String to Integer).
 - Return a new stream: ".map()" is an intermediate operation, so it returns a new stream with the transformed elements.
 ### .flatMap(): One-to-Many Transformation and Flattening:
+```
+The .flatmap() operation is more powerful. It's used when each element in the original stream can be transformed into zero or more elements (typically by producing another stream or a collection). ".flatMap()" then flattens these resulting streams into single stream.
+
+Imagine a machine that takes boxes of apples as input. For each box, it opens it and takes out all the individual apples, not boxes of apples.
+```
+```java
+import java.util.*;
+public class FlatMap{
+  public static void main(String args[]){
+    List<List<String>> listOfLists = Arrays.asList(
+        Arrays.asList("a","b"),
+        Arrays.asList("c","d", "e"),
+        Arrays.asList("f")
+    );
+    // Use .flatMap() to flatten the list of lists into a single stram of strings
+    Stream<String> flattenedStream = listOfLists.stream().flatMap(List::stream);
+    flattenedStream.forEach(s-> System.out.print(s+" "));
+    System.out.println();
+
+    //Another example:
+    List<String> words = Arrays.asList("Hello","world");
+    Stream<Character> characters= words.stream().flatMap(word -> word.chars()) // returns an IntStream of character codes
+                                                  .mapToObj(c -> (char) c)); //convert to Stream<Charcter>
+    characters.forEach(ch -> System.out.print(ch+" "));
+  }
+}
+```
