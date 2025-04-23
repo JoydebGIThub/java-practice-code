@@ -81,3 +81,41 @@ public class ParalleStream{
 - Stateful Operations: Be cautious with "stateful intermediate operations (like distinct() or sorted())" in parallel streams, as their behavior might become unpredicatable or less efficient due to the parallel processing order.
 - Side Effects: Avoid operations with "side effects" (like modifying external variables or performing I/O within forEach without proper synchronization) is parallel streams, as the order of execution is not guaranteed, leading to potential race conditions and unexpected results.
 - Ordering: As seen in the previous example with "forEach", the order of processing and the final output might not be the same as the original order of elements in a parallel stram. If you need to preserve the order, you might need to use "forEachOrdered()", but this can reduce the performance benefites of parallelism.
+***
+***
+## .map() and .flatMap()
+### .map(): One to One Transformation:
+```
+The ".map()" operation is used to transform "each element" in a stream into a "new element". It takes a "Function" as an argument, which is applied to each element of the stream. The result is a new stream containing the "transformed elements". There's a direct "one-to-one" mapping:➡️ one input element produces one output element.
+
+Imagine a machine that takes individual apples as input and outputs peeled apples. For each apple you put in, you get one peeled apple out.
+```
+```java
+import java.util.*;
+public class MapExample{
+  public static void main(String[] a){
+    List<String> words = Arrays.asList("hello","world","java");
+
+    //Use .map() to transform each word to its length
+    Stream<Integer> wordLengths = words.stream()
+                                        .map(String::length); //Method reference to String's length();
+    //print the lengths
+    wordLengths.forEach(length->System.out.print(length+" "));
+    System.out.println();
+
+    //Converting numbers to their squares
+    List<Integer> numbers= Arrays.asList(1, 2, 3, 4, 5);
+    Stream<Integer> squares = numbers.stream().map(n -> n*n); //Lambda expression for squaring
+    squares.forEach(n->System.out.println(n+" "));
+    System.out.println();
+  }
+```
+#### Breakdown:
+1. words.stream().map(String::length):
+   - We create a stream of "String" object from the "words" list.
+   - The ".map()" operation takes the "String::length" method reference. For each "String" in the stream, the "length()" method is called, and the result(an Integer representing the length) becomes the element in the new stream "wordLengths".
+#### Key Characteristics of .map():
+- One-to-one transformation: Each element in the input stream is transformed into exactly one element in the output stream.
+- Type transformation: The type of the elements in the output stream can be different from the type of the elements in the input stream (String to Integer).
+- Return a new stream: ".map()" is an intermediate operation, so it returns a new stream with the transformed elements.
+### .flatMap(): One-to-Many Transformation and Flattening:
