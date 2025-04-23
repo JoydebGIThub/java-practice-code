@@ -48,3 +48,8 @@ Think of a monitor like a "single key" that can open a door to a "critical secti
       }
     }
    ```
+#### Explanation:
+- The "increment()" method in the "Counter" class is declared as "synchronized".
+- When "Thread-1" calls "counter.increment()", it tries to acquire the monitor lock of the "counter" object. If no other thread holds the lock, "Thread-1" gets it, executes the "increment()" method, and then releases the lock.
+- If "Thread-2" tries to call "counter.increment()" while "Thread-1" holds the lock, "Thread-2" will be blocked and will have to wait until "Thread-1" releases the lock.
+- This ensures that the "counter++" operation is atomaic with respect to other synchronized methods on the same "counter" object, preventing race conditions. The final count will always be 2000
