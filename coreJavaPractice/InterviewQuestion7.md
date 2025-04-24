@@ -143,3 +143,159 @@ It's important to note that modern JVMs have implemented various optimizations t
 - Lock Elision: If the JVM can determine that a lock is only ever accessed by a single thread(even if the "synchronized" keyword is used), it might completely eliminate the locking operations.
 - Adaptive Spinning: When a thread tries to acquire a lock held by another thread, instead of immediately blocking, it might briefly "spin" (repeatedly check if the lock becomes avaiable). This can be more efficient if the lock is released quickly.
 - Lock Coarsening: If there are multiple consecutive synchronized blocks on the same object, the JVM might merge them into a single larger synchronized block to reduce the overhead or repeated lock acquisition and release.
+****
+****
+## Q: What is a deadlock? How can you avoid it in Java?
+### What is a Deadlock?
+Imagine a busy intersection in a city like Bangalore. If two cars enter the intersection from different directions and block each other's path, neither can proceed. They are in s "standstill"- a deadlock.
+In the context of multithreading, a "deadlock" occurs when two or more threads are blocked indefinitely, waiting for each other to release the resources(locks) that they need to proceed. Each thread wants, and neither is willing to give up what they have.
+#### The Four Necessary Conditions for a Deadlock (Coffman Conditions):
+For a deadlock to occure, all four of the following conditions must be true simultaneously:
+1. Mutual Exclusion: Resources involved must be non-shareable. Only one thread can hold a particular resource at a time (Think of a single key to a specific lock).
+2. Hold and Wait: A thread must hold at least one resource and be waiting to acquire one or more other resources held by other threads. (Like a car stopped in the intersection, blocking another while waiting for its own path to clear)
+3. No Preemption: Resources cannot be forcibly taken away from a thread that is holding them. A resource can only be released voluntarily by the thread holding it. (You can't just magically move the cars out of the intersection; they need to move themselves).
+4. Circular wait: There must exist a circular chain of two or more threads, where each thread is waiting for a resource held by the next thread in the chain. (Car A is blocking Car B, and Car B is blocking Car A, forming a circle of waiting).
+#### How Deadlocks Manifest in Java(Coding Examples):
+```java
+public class Deadlock{
+   private static final Object resource1= new Object();
+   private static final Object resource2= new Object();
+
+   public static void main(String[] args){
+      Thread t1= new Thread(()->{
+         synchronized(resource1){
+            System.out.println(Thread.currentThread().getName()+ " acquired lock on resource1.");
+            try{
+               Thread.sleep(100);//Simulate some work
+            }catch(InterruptedException e){
+               Thread.currentThread().interrupt();
+            }
+            System.out.println(Thread.currentThread().getName()+" is waiting to acquire lock on resource2...");
+            synchronized(resource2){
+               System.out.println(Thread.currentThread().getName()+" acquired lock on resource2.");
+               // Critical section accessing both resources
+            }
+            System.out.println(Thread.currentThread().getName()+" released lock on resource2.");
+         }
+         System.out.println(Thread.currentThread().getName()+" released lock on resource1.");
+      }, "Thread-1");
+
+      Thread t2= new Thread(()->{
+         synchronized(resource2){
+            System.out.println(Thread.currentThread().getName()+ " acquired lock on resource2.");
+            try{
+               Thread.sleep(100);//Simulate some work
+            }catch(InterruptedException e){
+               Thread.currentThread().interrupt();
+            }
+            System.out.println(Thread.currentThread().getName()+" is waiting to acquire lock on resource1...");
+            synchronized(resource1){
+               System.out.println(Thread.currentThread().getName()+" acquired lock on resource1.");
+               // Critical section accessing both resources
+            }
+            System.out.println(Thread.currentThread().getName()+" released lock on resource1.");
+         }
+         System.out.println(Thread.currentThread().getName()+" released lock on resource2.");
+      }, "Thread-2");
+      t1.start();
+      t2.start();
+   }
+}
+```
+#### Output:
+```
+Thread-1 acquired lock on resource1.
+Thread-2 acquired lock on resource2.
+Thread-2 is waiting to acquire lock on resource1...
+Thread-1 is waiting to acquire lock on resource2...
+```
+#### Scenario Leading to Deadlock:
+1. "Thread-1" acquires the lock on "resource1";
+2. "Thread-2" acquires the lock on "resource2";
+3. "Thread-1" now tries to acquire the lock on "resource2", but it's held by "Thread-2", so "Thread-1" blocks.
+4. "Thread-2" now tries to acquire the lock on "resource1", but it's held by "Thread-2", so "Thread-2" blocks.
+
+***
+### How to Avoid Deadlock in Java:
+The key to avoiding deadlocks is to break one or more of the four necessary conditions. Here are common strategies:
+1. Avoid Circular Wait(Most common and effective strategy):
+   - Acquire Locks in a Consistent Order: If all threads acquire the necessary locks in the same order, the circular wait condition cannot occur. In our example, if both threads always tried to acquire "resource1" first, and then "resource2", a deadlock would be unlikely.
+     ```java
+      public class AvoidDeadlockConsistentOrder{
+         private static final Object resource1= new Object();
+         private static final Object resource2= new Object();
+           public static void main(String args[]){
+               Thread t1= new Thread(()->acquireInOrder(resource1, resource2),"Thread-1");
+               Thread t2= new Thread(()->acquireInOrder(resource1, resource2),"Thread-2");
+
+               t1.start();
+               t2.start();
+           }
+           public static void acquireInOrder(Object firstLock, Object secondLock){
+               synchronized(firstLock){
+                  System.out.println(Thread.currentThread().getName() + " acquired lock on "+firstLock);
+                  try{
+                     Thread.sleep(100);
+                  }catch(InterruptedException e){
+                        Thread.currentThread().interrupt();
+                  }
+                  synchronized(secondLock){
+                     System.out.println(Thread.currentThread().getName() + " acquired lock on "+secondLock);
+                  }
+                  System.out.println(Thread.currentThread().getName() + " released lock on "+secondLock);
+               }
+              System.out.println(Thread.currentThread().getName() + " released lock on "+firstLock);
+           }
+     }
+     ```
+2. Limit Holding and Waiting:
+   - Acquire All necessary Locks at Once: Try to acquire all the locks a thread needs before it starts its task. If a thread cannot acquire all the locks, it should release any locks it currently holds and try again later.
+     ```java
+         import java.util.concurrent.locks.Lock;
+         import java.util.concurrent.locks.ReentrantLock;
+         public class AvoidDeadLock{
+            public static final Lock lock1= new ReentrantLock();
+            public static final Lock lock2= new ReentrantLock();
+
+            public static void main(String args[]){
+               Thread t1= new Thread(()->tryAcquireBoth(lock1, lock2), "Thread-1");
+               Thread t2= new Thread(()->tryAcquireBoth(lock2, lock1), "Thread-2");// different acquisition order initially
+               t1.start();
+               t2.start();
+            }
+            public static void tryAcquireBoth(Lock firstLock, Lock secondLock){
+               while(true){
+                  boolean firstAcquired = false;
+                  boolean secondAcquired = false;
+
+                  try{
+                        firstAcquired = firstLock.tryLock();
+                        secondAcquired = secondLock.tryLock();
+                  }finally{
+                     if(firstAcquired && secondAcquired){
+                          System.out.println(Thread.currentThread().getName()+" acquired both locks.");
+                          lock2.unlock();
+                          lock1.unlock();
+                          break;
+                     }if(firstAcquired){
+                           lock1.unlock();
+                     }if(secondAcquired){
+                           lock2.unlock();
+                     }
+
+                     try{
+                        Thread.sleep(100);
+                     }catch(InterruptedException e){
+                        Thread.currentThread().interrupt();
+                          break;
+                     }
+                  }
+               }
+            }
+         }
+     ```
+     - Using: "java.util.concurrent.locks.Lock" and its "tryLock()" method allows a thread to attempt to acquire a lock without blocking indefinitely. If it can't get all the necessary locks, it can release the ones it holds and try again.
+3. Allow Preemption(Less Common with Standard synchronized):
+   - With standard "synchronized", preemption is not directly supported. However the "java.util.concurrent.locks.Lock" interface provides mechanisms(through complex to implement correctly) that could potentially allow for some form of preemption. This typically involves setting timeout on lock acquisition attempts.
+4. Avoid Hold and Wait:
+   - Request All resources at the beginning: A thread should request all the resources it needs before starting its execution. If any resource is unavailable, the thread should not acquired any resources and should try again later.
