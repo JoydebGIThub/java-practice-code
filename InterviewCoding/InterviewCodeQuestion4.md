@@ -53,3 +53,37 @@ class Main {
 }
 
 ```
+### Solution no: 4
+```java
+import java.util.*;
+class Main {
+    public static void main(String[] args) {
+        int[] a= {1, 20, 5, 10, 12};
+        List<Integer> l= Arrays.asList(Arrays.stream(a).boxed().toArray(Integer[]::new));
+        l.stream()
+            .max(Integer::compareTo)
+            .ifPresent(n-> System.out.print(n));
+    }
+}
+
+```
+#### Explanation:
+1. Arrays.asList() and the ArrayList constructor
+2. Arrays.stream(a): This creates an "IntStream" from the integer array "a".
+3. .boxed(): This converts the "IntStream" to a "Stream<Integer>", wrapping each int in an Integer object.
+4. .toArray(Integer[]::new): This collects the elements of the stream into a new Integer[] array.
+### Solution no:5
+```java
+import java.util.*;
+class Main {
+    public static void main(String[] args) {
+        int[] a= {1, 20, 5, 10, 12};
+        List<Integer> l= Arrays.stream(a).boxed().toList();
+        l.stream()
+            .max(Integer::compareTo)
+            .ifPresent(n-> System.out.print(n));
+    }
+}
+```
+#### Explanation:
+1. .toList(): This collects the elements of the stream into an immutable List<Integer>.
