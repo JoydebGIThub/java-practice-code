@@ -37,3 +37,19 @@ class Main {
 }
 
 ```
+
+### Solution no: 3
+```java
+import java.util.*;
+class Main {
+    public static void main(String[] args) {
+        int[] arr= {1, 20, 5, 10, 12};
+        List<Integer> l= new ArrayList<>();
+        for(int i=0; i<arr.length;i++){
+            l.add(arr[i]);
+        }
+        l.stream().max(Integer::compareTo).ifPresent(n-> System.out.print(n));
+    }
+}
+
+```
