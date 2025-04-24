@@ -80,7 +80,127 @@ Optional<T> is a container object that may or may not contain a non-null value o
     Optional<User> userOptional = findUserById(123); // Returns Optional<User>
     Optional<String> emailOptional = userOptional.flatMap(User::getEmail); // User::getEmail returns Optional<String>
   ```
+***
+***
+## Q: What are default and static methods in interfaces?
+### Default Methods: Adding Implementation to Interfaces
+Before Java 8, interfaces could only declare abstract methods (methods without implementation). If you wanted to add a new method to an interface, all the classes that implemented that interface would be forced to provide an implementation for the new method, even if that implementation was the same across many classes or not needed at all. This posed a significant challenge for evolving interfaces without breaking existing implementations.
 
+Default methods solve this problem by allowing you to provide a default implementation for a method directly within the interface. Classes that implement the interface can either use this default implementation or override it with their own specific implementation.
 
+#### Purpose of Default Methods:
+1. Interface Evolution: Allows you to add new methods to existing interfaces without breaking the compatibility of classes that already implement them. The implementing classes can choose to adopt the default implementation or provide their own.
+2. Providing Common Functionality: Enables interfaces to provide common utility methods that implementing classes can reuse. This promotes code reuse and reduces redundancy.
+#### Syntax of Default Methods:
+```java
+interface MyInterface {
+    // Abstract method (must be implemented by implementing classes)
+    void abstractMethod();
 
-  
+    // Default method (implementing classes can use or override)
+    default void defaultMethod() {
+        System.out.println("Default implementation of defaultMethod in MyInterface");
+        // You can include method body here
+    }
+}
+
+class MyClass implements MyInterface {
+    @Override
+    public void abstractMethod() {
+        System.out.println("Implementation of abstractMethod in MyClass");
+    }
+
+    // Can choose to not override defaultMethod(), in which case the
+    // default implementation from MyInterface will be used.
+}
+
+class AnotherClass implements MyInterface {
+    @Override
+    public void abstractMethod() {
+        System.out.println("Implementation of abstractMethod in AnotherClass");
+    }
+
+    // Override the defaultMethod() with a custom implementation
+    @Override
+    public void defaultMethod() {
+        System.out.println("Custom implementation of defaultMethod in AnotherClass");
+    }
+}
+
+public class DefaultMethodExample {
+    public static void main(String[] args) {
+        MyClass obj1 = new MyClass();
+        obj1.abstractMethod();
+        obj1.defaultMethod(); // Uses the default implementation
+
+        AnotherClass obj2 = new AnotherClass();
+        obj2.abstractMethod();
+        obj2.defaultMethod(); // Uses the overridden implementation
+    }
+}
+```
+#### Output:
+```
+Implementation of abstractMethod in MyClass
+Default implementation of defaultMethod in MyInterface
+Implementation of abstractMethod in AnotherClass
+Custom implementation of defaultMethod in AnotherClass
+```
+### Static Methods in Interfaces: Utility Functions Within the Interface
+Before Java 8, if you wanted to have utility methods related to an interface, you would typically create a separate utility class (e.g., Collections for Collection). Java 8 allowed interfaces to have static methods, which are associated with the interface itself, not with any specific instance of a class that implements the interface.
+#### Purpose of Static Methods in Interfaces:
+1. Utility Functions Related to the Interface: Allows you to group utility methods directly within the interface where they logically belong. This improves organization and discoverability of related functions.
+2. Factory Methods: Interfaces can provide static factory methods to create instances of classes that implement the interface
+#### Syntax of Static Methods:
+```java
+interface MyUtilityInterface {
+    // Abstract method
+    String processText(String text);
+
+    // Static utility method related to the interface
+    static boolean isNotNullOrEmpty(String str) {
+        return str != null && !str.trim().isEmpty();
+    }
+
+    // Static factory method
+    static MyUtilityInterface createProcessor(boolean toUpperCase) {
+        if (toUpperCase) {
+            return String::toUpperCase; // Method reference
+        } else {
+            return String::toLowerCase; // Method reference
+        }
+    }
+}
+
+class MyTextProcessor implements MyUtilityInterface {
+    @Override
+    public String processText(String text) {
+        return "Processed: " + text;
+    }
+}
+
+public class StaticMethodInterfaceExample {
+    public static void main(String[] args) {
+        String input = "  Hello World  ";
+
+        // Calling the static method of the interface directly
+        boolean notEmpty = MyUtilityInterface.isNotNullOrEmpty(input);
+        System.out.println("Is not null or empty: " + notEmpty);
+
+        // Using the static factory method
+        MyUtilityInterface upperCaseProcessor = MyUtilityInterface.createProcessor(true);
+        System.out.println(upperCaseProcessor.processText(input));
+
+        MyUtilityInterface lowerCaseProcessor = MyUtilityInterface.createProcessor(false);
+        System.out.println(lowerCaseProcessor.processText(input));
+    }
+}
+
+````
+#### Output:
+```
+Is not null or empty: true
+Processed:   HELLO WORLD
+Processed:   hello world
+```
+
