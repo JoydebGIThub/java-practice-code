@@ -63,6 +63,9 @@ System.out.println(table.get(1));
  HashMap<Integer, String> h= new HashMap<>();
 h.put(1, "Joydeb");
 h.put(null,"kal");
+h.put(null,"Joydeb");//override
+h.put(2,"null");
+h.put(3,"null");
 System.out.print(h.get(null)); //kal
 ```
 
