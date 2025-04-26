@@ -23,3 +23,6 @@
 - Every new request, client sends the token in the Authorization Header.
 - Server validates the token's signature — no session checking!
 🧠 Perfect for REST APIs, microservices, mobile apps.
+
+![Session vs. JWT Diagram](https://github.com/user-attachments/assets/ad17767c-a08b-4d8c-9217-974ba5dbcddb)
+
