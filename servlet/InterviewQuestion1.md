@@ -47,3 +47,40 @@ Imagine a Servlet as a worker bee in a web application hive. The Servlet contain
 - Destroy (destroy()): The Servlet is taken out of service and performs cleanup (once).
 ********
 ********
+# What are the main methods of HttpServlet?
+when we're talking about handling HTTP requests in Java Servlets, the HttpServlet class is our go-to. It provides a framework with several key methods that you'll override in your own Servlets to handle different types of HTTP requests. Here are the main ones you'll encounter and use regularly:
+1. doGet(HttpServletRequest request, HttpServletResponse response):
+   -
+   - This method is invoked by the Servlet container when the client makes an "HTTP GET" request to the Servlet's URL.
+   - "GET" requests are typically used to retrieve data from the server. They should ideally be idempotent, meaning that making the same request multiple times should have the same effect as making it once.
+   - Within this method, you'll read request parameters using "request.getParameter()", access headers using "request.getHeader()", and then use the "response" object to send data back to the client (e.g., HTML, JSON, images).
+2. doPost(HttpServletRequest request, HttpServletResponse response):
+   -
+   - This method handles HTTP "POST" requests.
+   - POST requests are generally used to "submit data" to the server to be processed, such as form submissions, creating new resources, or updating existing ones. They are not necessarily idempotent.
+   - Similar to "doGet()", you'll use the "request" object to access submitted data and the "response" object to send a reply.
+3. doPut(HttpServletRequest request, HttpServletResponse response):
+   -
+   - This method is invoked for HTTP "PUT" requests.
+   - "PUT" requests are typically used to "update" an existing resource at a specific URI. They are often expected to be idempotent.
+   - You'll usually read the data being sent in the "request" body and then "update" the corresponding resource "on the server".
+4. doDelete(HttpServletRequest request, HttpServletResponse response):
+   -
+   - This method handles HTTP "DELETE" requests.
+   - As the name suggests, "DELETE" requests are used to delete a resource identified by the request URI. They are also often expected to be idempotent.
+   - Your Servlet will need to identify the resource to be deleted based on the request and then perform the deletion.
+5. service(HttpServletRequest request, HttpServletResponse response):
+   -
+   - This method is actually inherited from the "GenericServlet" class (which HttpServlet extends). However, the "HttpServlet" class overrides this "service()" method.
+   - The "HttpServlet's service()" method is the entry point for handling HTTP requests. It examines the HTTP method of the incoming request (e.g., GET, POST, PUT, DELETE) and then dispatches the request to the appropriate "doGet()", "doPost()", "doPut()", or "doDelete()" method.
+   - You generally "don't override" this "service(HttpServletRequest, HttpServletResponse)" method directly in your Servlets. Instead, you override the specific "doXXX()" methods to handle different HTTP methods.
+6. init(ServletConfig config):
+   -
+   - In the Servlet lifecycle, this method is called once when the Servlet is initialized.
+   - While inherited from GenericServlet, it's commonly used in HttpServlet subclasses to perform one-time setup tasks. You can access the ServletConfig object here to retrieve initialization parameters.
+7. destroy():
+   -
+   - Also inherited from GenericServlet, this method is called once when the Servlet is about to be taken out of service.
+   - You'd override this to perform any cleanup operations.
+*************
+*************
