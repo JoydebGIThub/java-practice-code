@@ -54,4 +54,38 @@ Show from C
 If you don't override, you will get a compile-time error:
 - "Duplicate default methods named show with the parameters () are inherited from the types A and B."
 
+********************
+********************
+# ✅ What is the Diamond Problem in Java?
+## 🎯 Definition:
+The diamond problem happens in multiple inheritance, when a class inherits from two classes (or interfaces) that have a common ancestor, leading to confusion about which path (method) should be inherited.
+### 🔥 Why it’s called Diamond Problem?
+- The class hierarchy forms a diamond shape:
+  - Top: One parent (Grandparent class/interface)
+  - Middle: Two child classes/interfaces
+  - Bottom: One class that inherits both
+(Imagine it like a diamond ♦️)
+### ⚡ But with Interfaces (Java 8 onwards)?
+- Java 8 introduced default methods in interfaces, so now multiple interfaces can have method implementations.
+- If two interfaces provide the same default method, the implementing class must override it to solve the conflict manually (as explained earlier).
+```java
+interface A {
+    default void hello() {
+        System.out.println("Hello from A");
+    }
+}
 
+interface B {
+    default void hello() {
+        System.out.println("Hello from B");
+    }
+}
+
+class C implements A, B {
+    @Override
+    public void hello() {
+        A.super.hello();  // Resolve manually
+    }
+}
+
+```
