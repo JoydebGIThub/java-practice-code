@@ -62,4 +62,14 @@ public class VarargsExample {
 }
 
 ```
-
+************************************
+# Can we replace the String[] in main method with variable arguments?
+Yes, you can replace the "String[] args" in the "main" method with variable arguments (varargs). In fact, the main method in Java already uses varargs to handle command-line arguments.
+## The standard main method signature is:
+```java
+public static void main(String[] args)
+```
+"**This method signature uses varargs (String... args), which allows you to pass any number of String arguments when starting the Java application.**"
+### Important Points:
+- The String... args in the main method allows any number of arguments (including none).
+- The behavior is the same as using String[] args because String... args is internally treated as a String[] array.
