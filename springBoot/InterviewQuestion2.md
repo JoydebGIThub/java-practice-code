@@ -24,8 +24,22 @@ They group together commonly used libraries for a specific functionality, so you
 </dependency>
 
 ```
-
-
+***************
+# Q: What is Spring Boot Auto-Configuration?
+Ans: Auto-Configuration in Spring Boot means Spring Boot automatically configures your application based on the libraries present in the classpath —
+without requiring you to write manual configuration (@Configuration) files.
+## Example:
+If Spring Boot detects spring-boot-starter-data-jpa and a Datasource in the application.properties,
+it automatically configures:
+1. EntityManagerFactory
+2. TransactionManager
+3. JPA repositories
+👉 No need to manually define these beans.
+## 🎯 Key Points:
+- It works using the annotation @EnableAutoConfiguration (which is part of @SpringBootApplication).
+- It uses classes like spring.factories internally to find which configuration to apply.
+- You can override auto-configuration by defining your own beans.
+- You can exclude specific auto-configurations if needed:
 
 
 
