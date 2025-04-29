@@ -15,38 +15,38 @@ Java provides a rich set of "built-in functional interfaces" in the "java.util.f
    -
    - Abstract Method: void run()
    - Purpose: Represents a task that can be "executed by a thread". It takes no arguments and returns no result.
-     ```java
-      Runnable task = () -> System.out.println("Running a task!");
-      new Thread(task).start();
-     ```
+```java
+Runnable task = () -> System.out.println("Running a task!");
+new Thread(task).start();
+```
 2. Callable<V>:
    -
    - Abstract Method: V "call()" throws Exception
    - Purpose: Represents a task that returns a result of type V and can throw a checked exception. Used with ExecutorService to get results from asynchronous tasks.
-     ```java
-           import java.util.concurrent.Callable;
-          import java.util.concurrent.ExecutionException;
-          import java.util.concurrent.ExecutorService; 1 
-          import java.util.concurrent.Executors;
-          import java.util.concurrent.Future;
+```java
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService; 1 
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-           Callable<String> taskWithResult = () -> "Result from Callable";
-          ExecutorService executor = Executors.newSingleThreadExecutor();
-          Future<String> future = executor.submit(taskWithResult);
-          try {
-              String result = future.get();
-              System.out.println("Result: " + result);
-          } catch (InterruptedException | ExecutionException e) {
-              e.printStackTrace();
-          } finally {
-              executor.shutdown();
-          }
-     ```
+Callable<String> taskWithResult = () -> "Result from Callable";
+ExecutorService executor = Executors.newSingleThreadExecutor();
+Future<String> future = executor.submit(taskWithResult);
+try {
+String result = future.get();
+System.out.println("Result: " + result);
+} catch (InterruptedException | ExecutionException e) {
+e.printStackTrace();
+} finally {
+executor.shutdown();
+}
+```
 3. Consumer<T>:
    -
    - Abstract Method: void accept(T t)
    - Purpose: Represents an operation that accepts a single input argument of type T and returns no result (performs a side effect). Often used in stream operations like forEach.
-     ```java
+```java
       import java.util.List;
       import java.util.Arrays;
       import java.util.function.Consumer;
@@ -54,12 +54,12 @@ Java provides a rich set of "built-in functional interfaces" in the "java.util.f
       List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
       Consumer<String> printName = name -> System.out.println("Hello, " + name + "!");
       names.forEach(printName);
-     ```
+```
 4. Function<T, R>:
    -
    - Abstract Method: R apply(T t)
    - Purpose: Represents a function that accepts one argument of type T and produces a result of type R. Used in stream operations like map.
-     ```java
+```java
       import java.util.List;
       import java.util.Arrays;
       import java.util.function.Function;
@@ -70,22 +70,22 @@ Java provides a rich set of "built-in functional interfaces" in the "java.util.f
              .map(square)
              .forEach(result -> System.out.print(result + " ")); // Output: 1 4 9 16 25
       System.out.println();
-     ```
+```
 5. Supplier<T>:
    -
    - Abstract Method: T get()
    - Purpose: Represents a supplier of results. It takes no arguments and returns a result of type T. Often used for lazy evaluation or generating values.
-     ```java
+```java
       import java.util.function.Supplier;
 
       Supplier<Double> randomValueSupplier = () -> Math.random();
       System.out.println("Random value: " + randomValueSupplier.get());
-     ```
+```
 6. Predicate<T>:
    -
    - Abstract Method: boolean test(T t)
    - Purpose: Represents a predicate (a boolean-valued function) of one argument of type T. Used in stream operations like filter.
-     ```java
+```java
       import java.util.List;
       import java.util.Arrays;
       import java.util.function.Predicate;
@@ -96,7 +96,7 @@ Java provides a rich set of "built-in functional interfaces" in the "java.util.f
              .filter(isEven)
              .forEach(result -> System.out.print(result + " ")); // Output: 2 4 6
       System.out.println();
-     ```
+```
 ### Creating Your Own Functional Interfaces:
 ```java
 @FunctionalInterface
@@ -138,25 +138,25 @@ A Java 8 Stream is a sequence of elements that supports various aggregate operat
 ### The Stream Pipeline: Source, Intermediate Operations, Terminal Operation
 A stream pipeline consists of three parts:
 1. Source: This is where the stream originates. It could be a Collection (using stream() or parallelStream()), an Array (Arrays.stream()), a Supplier, or an I/O channel.
-   ```java
+```java
       List<String> cities = Arrays.asList("Mumbai", "Delhi", "Kolkata", "Chennai", "Bangalore");
       Stream<String> cityStream = cities.stream(); // Sequential stream
       Stream<String> parallelCityStream = cities.parallelStream(); // Parallel stream
       
       int[] numbers = {1, 2, 3, 4, 5};
       IntStream numberStream = Arrays.stream(numbers);
-   ```
+```
 2. Intermediate Operations: These operations transform or filter the stream. They always return a new stream, allowing for chaining. Examples include filter(), map(), flatMap(), sorted(), distinct(), peek().
-   ```java
+```java
       Stream<String> filteredCities = cityStream.filter(city -> city.startsWith("B")); // Filters cities starting with "B"
       Stream<String> upperCaseCities = filteredCities.map(String::toUpperCase); // Converts to uppercase
-   ```
+```
 3. Terminal Operation: This operation consumes the stream and produces a final result or a side effect. Once a terminal operation is called, the stream pipeline is executed. Examples include forEach(), collect(), reduce(), count(), min(), max(), anyMatch(), allMatch(), findFirst().
-   ```java
+```java
       upperCaseCities.forEach(System.out::println); // Prints each uppercase city
       long count = cities.stream().filter(city -> city.length() > 5).count(); // Counts cities with length > 5
       List<String> collectedCities = cities.stream().filter(city -> city.contains("i")).collect(Collectors.toList()); // Collects cities containing "i" into a List
-   ```
+```
 ### How Laziness Works:
 ```java
 List<String> fruits = Arrays.asList("apple", "banana", "orange", "grape", "kiwi");
