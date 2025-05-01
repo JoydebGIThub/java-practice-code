@@ -138,3 +138,52 @@ public String deleteUser(@PathVariable int id) {
 ```
 DELETE http://localhost:8080/users/101
 ```
+### ✅ 6. HEAD Method
+#### 🔹 Purpose:
+- Works exactly like **GET**, but it **only returns headers**, **no response body**.
+- Useful to **check if a resource exists**, or to get metadata like content type, length, etc., without fetching the full content.
+#### 💡 Use Cases:
+- Checking resource availability (like in link validation).
+- Pre-check before downloading a large file.
+- Verifying if a cache has expired (based on headers).
+```java
+	@RequestMapping(value = "/{id}", method = RequestMethod.HEAD)
+	public ResponseEntity<Void> headUser(@PathVariable int id) {
+	    HttpHeaders headers = new HttpHeaders();
+	    if(id == 1) {
+		    headers.add("User-Exists", "true");
+		    System.out.print(true);
+		    return ResponseEntity.ok().headers(headers).build();
+	    }
+	   
+	    return ResponseEntity.badRequest().headers(headers).build();
+	}
+```
+#### Expected Output (No body)::
+```
+HTTP/1.1 200 OK
+User-Exists: true
+Content-Length: 0
+```
+### ✅ 7. OPTIONS Method
+#### 🔹 Purpose:
+- Returns the HTTP methods supported by a resource.
+- Commonly used in CORS (Cross-Origin Resource Sharing) preflight requests.
+#### 💡 Use Cases:
+- Used by browsers before sending PUT or DELETE requests.
+- Helps clients understand allowed operations (GET, POST, etc.).
+- Security: checks what’s exposed by the API.
+```java
+	@RequestMapping(value = "/options", method = RequestMethod.OPTIONS)
+	public ResponseEntity<Void> options() {
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.add("Allow", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+	    return ResponseEntity.ok().headers(headers).build();
+	}
+```
+#### 🖥️ Expected Output:
+```
+HTTP/1.1 200 OK
+Allow: GET, POST, PUT, DELETE, OPTIONS, HEAD
+
+```
