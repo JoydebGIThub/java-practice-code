@@ -79,7 +79,25 @@ map.put("B", "Banana");
 // map.put(null, "Null");  // Throws NullPointerException
 System.out.println(map);  // Output: {A=Apple, B=Banana}
 ````
-
+***************************************************************************************************************
+## Map methods:
+```java
+import java.util.*;
+class Main {
+    public static void main(String[] args) {
+        Map<Integer, String> maps = new HashMap<>();
+        maps.put(1, "Joydeb");
+        maps.put(2, "Joy");
+        maps.put(3, "deb");
+        System.out.println(maps);//{1=Joydeb, 2=Joy, 3=deb}
+        System.out.println(maps.get(1));//Joydeb
+        System.out.println(maps.keySet());//[1, 2, 3]
+        maps.forEach((key, value)->{
+           System.out.print(key+ ", ");  // 1, 2, 3,
+        });
+    }
+}
+```
 
 
 
