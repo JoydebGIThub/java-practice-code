@@ -96,10 +96,45 @@ Content-Type: application/json
   "name": "Updated John"
 }
 ```
+#### Output:
+```
+User with ID 101 updated to name: Updated John
+```
 ### 🚀 4. PATCH – Partially update a resource
 #### ✅ Purpose:
 Update a part of the resource (not the whole object).
 ```java
+@PatchMapping("/{id}")
+public String patchUser(@PathVariable int id, @RequestBody Map<String, String> updates) {
+    return "User with ID " + id + " updated field: " + updates;
+}
+```
+#### Url to hit:
+```
+PATCH http://localhost:8080/users/101
+Content-Type: application/json
+
+{
+  "name": "Partial John"
+}
 
 ```
+#### Output:
+```
+User with ID 101 updated field: {name=Partial John}
 
+```
+### 🚀 5. DELETE – Remove a resource
+#### ✅ Purpose:
+Delete a resource by ID.
+```java
+@DeleteMapping("/{id}")
+public String deleteUser(@PathVariable int id) {
+    return "User with ID " + id + " deleted";
+}
+
+```
+#### Url to hit:
+```
+DELETE http://localhost:8080/users/101
+```
