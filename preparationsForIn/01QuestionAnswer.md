@@ -288,6 +288,68 @@ try (InputStream inputStream = new FileInputStream("file.txt")) {
 **try-with-resources is a powerful and recommended construct in Java for automatically managing resources that need to be closed. It makes your code cleaner, more robust, and less prone to resource leaks. When you encounter a class that implements AutoCloseable, using it within a try-with-resources block is generally the best practice.**
 ******************************************************************************************************************
 ## Q: What is the difference between == and .equals() method?
+- **== Operator (Equality Operator)**:
+  - Behavior: The == operator in Java is used to compare **primitive data types and object references**.
+  - **Primitive Types**: When used with primitive data types (like int, char, float, boolean, etc.), == compares the actual values stored in the variables. Two primitive variables are equal if they hold the same value.
+```java
+int num1 = 10;
+int num2 = 10;
+System.out.println(num1 == num2); // Output: true
+
+char char1 = 'a';
+char char2 = 'a';
+System.out.println(char1 == char2); // Output: true
+
+Integer a = 127;
+Integer b = 127;
+System.out.println(a == b); // true
+````
+  - **Object References**: When used with object references (variables that hold the memory address of objects), == compares the references themselves. It checks if the two reference variables point to the exact same object in memory. Two object references are equal only if they refer to the same instance.
+```java
+String str1 = new String("hello");
+String str2 = new String("hello");
+String str3 = str1;
+
+System.out.println(str1 == str2); // Output: false (str1 and str2 are different objects in memory)
+System.out.println(str1 == str3); // Output: true (str1 and str3 refer to the same object)
+
+Integer a = 1000;
+Integer b = 1000;
+System.out.println(a == b); //false
+```
+- **.equals() Method**:
+  - Behavior: The .equals() method is defined in the java.lang.Object class, which is the ultimate superclass of all classes in Java. Therefore, all Java objects inherit this method.
+  - The power of the .equals() method comes from the fact that classes can override this method to provide a custom definition of equality based on the content (state) of the objects rather than just their memory addresses.
+Many standard Java classes, such as String, Integer, Double, Date, and collections like List and Set, override the .equals() method to compare the actual values or contents of the objects.
+```java
+String str1 = new String("hello");
+String str2 = new String("hello");
+System.out.println(str1.equals(str2)); // Output: true (String's equals() compares content)
+
+Integer int1 = 10;
+Integer int2 = 10;
+System.out.println(int1.equals(int2)); // Output: true (Integer's equals() compares value)
+```
+******************************************************************************************************************************************************************
+## Q: What is the difference between abstract and interface and when to go for which one?
+- **Abstract Class**:
+  - Definition: An abstract class is a class that cannot be instantiated directly. It serves as a blueprint for its subclasses. It can contain both abstract methods (methods without a body, declared with the abstract keyword) and concrete methods (methods with a body). It can also have instance variables (fields), constructors, and static members.
+  - Purpose: Abstract classes are used to define a common template or base for a group of related classes. They can enforce a certain structure and provide default behavior that subclasses can inherit and potentially override.
+  - Inheritance: A class extends an abstract class using the extends keyword. A subclass must either implement all the abstract methods of its superclass or declare itself as abstract as well.
+  - State: Abstract classes can maintain state through instance variables.
+  - Constructors: Abstract classes can have constructors, which are called when a subclass is instantiated (via super()). These constructors are typically used to initialize the state of the abstract class.
+  - Method Implementation: Can have both abstract and concrete (implemented) methods.
+  - Multiple Inheritance: Java does not support multiple inheritance of classes. A class can extend only one abstract class.
+- **Interface**:
+  - Definition: An interface is a contract that specifies a set of methods that a class implementing the interface must provide. Before Java 8, interfaces could only contain abstract methods (implicitly public abstract), and constant fields (implicitly public static final).
+  - Purpose: Interfaces define a set of behaviors or capabilities that implementing classes agree to support. They focus on "what" a class can do, rather than "how" it does it. They enable polymorphism and allow for a form of "multiple inheritance of type."
+  - Implementation: A class implements an interface using the implements keyword. A class must provide implementations for all the abstract methods declared in the interface it implements (unless the class is abstract).
+  -   State (Before Java 8): Interfaces could not have instance variables (non-constant fields). They could only have public static final constants.
+  - State (Java 8 and later): With the introduction of default methods and static methods in interfaces (Java 8), and private methods (Java 9), interfaces can now provide some behavior and even maintain a limited form of internal logic (though not typical instance state).
+  - Method Implementation (Before Java 8): Only abstract methods (no implementation).
+  - Method Implementation (Java 8 and later): Can have default methods (with implementation), static methods (with implementation), and private methods (for internal use within the interface).
+  - Multiple Inheritance: A class can implement multiple interfaces. This allows a class to adhere to multiple contracts.
+***************************************************************************************************
 
 
 
