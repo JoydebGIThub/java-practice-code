@@ -2,6 +2,11 @@
 1. create 2 seperate **datasource** in .properties.
 2. create 2 different packages
 3. And in 2 packages we need to create seperate entities, repositories, config file for every database
+### To use two databases simultaneously in a Spring Boot application, you need to:
+1. Define two DataSource beans
+2. Create two EntityManagerFactory beans
+3. Set up separate TransactionManagers
+4. Configure JPA repositories to point to each source
 
 #### Properties:
 ```properties
@@ -61,4 +66,92 @@ public class Db1Config{
   }
   
 }
+```
+************************************************************************************************************
+
+```properties
+# Primary DB
+spring.datasource.url=jdbc:mysql://localhost:3306/primarydb
+spring.datasource.username=root
+spring.datasource.password=yourpass
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# Secondary DB
+secondary.datasource.url=jdbc:postgresql://localhost:5432/secondarydb
+secondary.datasource.username=postgres
+secondary.datasource.password=yourpass
+secondary.datasource.driver-class-name=org.postgresql.Driver
+
+```
+##### Primary Database Configuration
+```java
+@Configuration
+@EnableTransactionManagement
+@EnableJpaRepositories(
+    basePackages = "com.example.primary.repository",
+    entityManagerFactoryRef = "primaryEntityManagerFactory",
+    transactionManagerRef = "primaryTransactionManager"
+)
+public class PrimaryDbConfig {
+
+    @Primary
+    @Bean
+    public DataSource primaryDataSource() {
+        return DataSourceBuilder.create().build();
+    }
+
+    @Primary
+    @Bean
+    public LocalContainerEntityManagerFactoryBean primaryEntityManagerFactory(
+            EntityManagerFactoryBuilder builder) {
+        return builder
+                .dataSource(primaryDataSource())
+                .packages("com.example.primary.model")
+                .persistenceUnit("primary")
+                .build();
+    }
+
+    @Primary
+    @Bean
+    public PlatformTransactionManager primaryTransactionManager(
+            @Qualifier("primaryEntityManagerFactory") EntityManagerFactory emf) {
+        return new JpaTransactionManager(emf);
+    }
+}
+
+```
+##### Secondary Database Configuration
+```java
+@Configuration
+@EnableTransactionManagement
+@EnableJpaRepositories(
+    basePackages = "com.example.secondary.repository",
+    entityManagerFactoryRef = "secondaryEntityManagerFactory",
+    transactionManagerRef = "secondaryTransactionManager"
+)
+public class SecondaryDbConfig {
+
+    @Bean
+    @ConfigurationProperties(prefix = "secondary.datasource")
+    public DataSource secondaryDataSource() {
+        return DataSourceBuilder.create().build();
+    }
+
+    @Bean
+    public LocalContainerEntityManagerFactoryBean secondaryEntityManagerFactory(
+            EntityManagerFactoryBuilder builder) {
+        return builder
+                .dataSource(secondaryDataSource())
+                .packages("com.example.secondary.model")
+                .persistenceUnit("secondary")
+                .build();
+    }
+
+    @Bean
+    public PlatformTransactionManager secondaryTransactionManager(
+            @Qualifier("secondaryEntityManagerFactory") EntityManagerFactory emf) {
+        return new JpaTransactionManager(emf);
+    }
+}
+
 ```
