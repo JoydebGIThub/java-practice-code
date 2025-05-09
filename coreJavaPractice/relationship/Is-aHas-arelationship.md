@@ -1,14 +1,10 @@
 # IS-A Relationship (Inheritance)
 ## What it means:
-```txt
-    Class B IS-A Class A, it means the Class B is specialized version of Class A.
-    This is inheritance - B inherites A's characteristics and behaviours 
-```
+- **Class B** IS-A **Class A**, it means the Class B is specialized version of Class A. This is inheritance - B inherites A's characteristics and behaviours 
+    
 ## Real-world Analogy:
-```txt
-    1. All birds can fly (generally), eat, and have feathers.
-    2. A sparrow can do all that, plus it might have its own specific behavior.
-```
+1. All birds can fly (generally), eat, and have feathers.
+2. A sparrow can do all that, plus it might have its own specific behavior.
 
 ```java
 class Bird{
@@ -30,16 +26,13 @@ class Sparrow extends Bird{
 ***
 # HAS-A Relationship (Composition / Aggregation)
 ## What It Means:
-```txt
-When we say Class A HAS-A Class B, it means that CLass A contains or uses an instance of Class B. This is "composition" - it's a "part-of" or "uses-a" relationship
-```
+- When we say Class A HAS-A Class B, it means that CLass A contains or uses an instance of Class B. This is "composition" - it's a "part-of" or "uses-a" relationship
+
 ## Real-world Analogy:
-```txt
-A Car HAS-A Engine
+- A Car HAS-A Engine
     1. A car isn't an engine
     2. But it "contains" or "uses" an engine
     3. Engine is a separate class; Car simply uses it.
-```
 
 ```java
 class Engine{
