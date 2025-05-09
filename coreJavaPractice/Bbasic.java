@@ -7,7 +7,7 @@ public class Bbasic {
         int num = switch (day) {
             case "MONDAY" -> 1;
             case "TUESDAY" -> 2;
-            default -> 0;
+            default -> 0;// default is more important here. In standard switch default not compulsory 
         };
         String days= switch (weekdays){
             case 1 -> "Monday";
