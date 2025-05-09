@@ -1,16 +1,12 @@
 # Interview Therory Question:
 ## Q: What is the difference between Stream and Parallel Stream?
-```
-Imagine we have a list of items, and we want to perform some operations on them - maybe filter out certain items, transform them in some way, or calculate a summary.
+- Imagine we have a list of items, and we want to perform some operations on them - maybe filter out certain items, transform them in some way, or calculate a summary.
 Traditionally, we might use loops (for, while) to iterates through the list and do these things step by step.
-```
-```
-Java "Streams", introduced in Java 8, provide a more elegant and powerful way to process collections of data. They allow you to express these operations as a "pipeline of fuctions" that operate on the elements of the stream.
-```
+- Java "Streams", introduced in Java 8, provide a more elegant and powerful way to process collections of data. They allow you to express these operations as a "pipeline of fuctions" that operate on the elements of the stream.
+
 ### Sequential Streams: One Step at a Time:
-```
-Think of a "sequential stream" like a single worker on an assembly line. Each item in the collection goes through the line, and the worker performs each operation on that item before moving to the next.
-```
+- Think of a "sequential stream" like a single worker on an assembly line. Each item in the collection goes through the line, and the worker performs each operation on that item before moving to the next.
+
 ```java
 import java.util.Arrays;
 import java.util.List;
@@ -38,14 +34,13 @@ public class SequentialStream{
 2. .filter(n -> n%2 !=0): This is an "intermediate operation". It takes a "Predicate"(a function that returns a boolean) and keeps only the elements for which the predicate is true (in this case, odd numbers). The stream now contains [1, 3, 5, 7, 9].
 3. .map(n-> n*2): Another intermediate operation. It takes a "Function" (a function that transforms one element to another) and applies it to each element in the stream. Here, each odd number is multiplied by 2. The stream now contains [2, 6, 10, 14, 18].
 4. .forEach(result -> System.out.print(result + " ")): This is a terminal operation. It consumes the stream and performs an action for each element. Here, it prints each number followed by a space.
+
 #### Key Point:
-```
-The operations in a sequential stream are executed one after the other, on a single thread.
-```
+- The operations in a sequential stream are executed one after the other, on a single thread.
+
 ### Parallel Streams: Many workers Doing the Job Simultaneously:
-```
-Now, imagine a "parallel stream" as having multiple workers on that assembly line. The work (processing the items) is divided among these workers, and they perform their tasks concurrently. This can significantly speed up processing for large datasets and computationally intensive operations.
-```
+- Now, imagine a "parallel stream" as having multiple workers on that assembly line. The work (processing the items) is divided among these workers, and they perform their tasks concurrently. This can significantly speed up processing for large datasets and computationally intensive operations.
+
 ```java
 import java.util.Arrays;
 import java.util.List;
@@ -85,11 +80,9 @@ public class ParalleStream{
 ***
 ## .map() and .flatMap()
 ### .map(): One to One Transformation:
-```
-The ".map()" operation is used to transform "each element" in a stream into a "new element". It takes a "Function" as an argument, which is applied to each element of the stream. The result is a new stream containing the "transformed elements". There's a direct "one-to-one" mapping:➡️ one input element produces one output element.
+- The ".map()" operation is used to transform "each element" in a stream into a "new element". It takes a "Function" as an argument, which is applied to each element of the stream. The result is a new stream containing the "transformed elements". There's a direct "one-to-one" mapping:➡️ one input element produces one output element.
+- Imagine a machine that takes individual apples as input and outputs peeled apples. For each apple you put in, you get one peeled apple out.
 
-Imagine a machine that takes individual apples as input and outputs peeled apples. For each apple you put in, you get one peeled apple out.
-```
 ```java
 import java.util.*;
 public class MapExample{
@@ -114,16 +107,16 @@ public class MapExample{
 1. words.stream().map(String::length):
    - We create a stream of "String" object from the "words" list.
    - The ".map()" operation takes the "String::length" method reference. For each "String" in the stream, the "length()" method is called, and the result(an Integer representing the length) becomes the element in the new stream "wordLengths".
+
 #### Key Characteristics of .map():
 - One-to-one transformation: Each element in the input stream is transformed into exactly one element in the output stream.
 - Type transformation: The type of the elements in the output stream can be different from the type of the elements in the input stream (String to Integer).
 - Return a new stream: ".map()" is an intermediate operation, so it returns a new stream with the transformed elements.
-### .flatMap(): One-to-Many Transformation and Flattening:
-```
-The .flatmap() operation is more powerful. It's used when each element in the original stream can be transformed into zero or more elements (typically by producing another stream or a collection). ".flatMap()" then flattens these resulting streams into single stream.
 
-Imagine a machine that takes boxes of apples as input. For each box, it opens it and takes out all the individual apples, not boxes of apples.
-```
+### .flatMap(): One-to-Many Transformation and Flattening:
+- The .flatmap() operation is more powerful. It's used when each element in the original stream can be transformed into zero or more elements (typically by producing another stream or a collection). ".flatMap()" then flattens these resulting streams into single stream.
+- Imagine a machine that takes boxes of apples as input. For each box, it opens it and takes out all the individual apples, not boxes of apples.
+
 ```java
 import java.util.*;
 public class FlatMap{
