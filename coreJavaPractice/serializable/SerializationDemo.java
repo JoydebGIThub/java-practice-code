@@ -1,6 +1,7 @@
 /*
 What is Serializable?
-Ans: In Java, Serializable is a marker interface (i.e., an interface with no methods) used to indicate that a class can be serialized — that is, its objects can be converted into a byte stream so they can be:
+Ans: In Java, Serializable is a marker interface (i.e., an interface with no methods) used to indicate that a class can be serialized
+— that is, its objects can be converted into a byte stream so they can be:
 1. Saved to a file or database,
 2. Transmitted over a network,
 3. Or cached in memory for later retrieval.
