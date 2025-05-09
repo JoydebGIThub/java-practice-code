@@ -65,6 +65,26 @@ public class Test {
 l,k,e,j,v,
 ```
 ***
+### Using stream
+```java
+class Main {
+    public static void main(String[] args) {
+        String a = "I Like Java";
+        a= a.toLowerCase();
+        String k = a;
+        System.out.println(a.chars()
+            .mapToObj(c -> (char) c)
+            .filter(x -> k.indexOf(x) == k.lastIndexOf(x))
+            .toList()
+            );//[l, k, e, j, v]
+    }
+}
+```
+### Output:
+```
+[l, k, e, j, v]
+```
+***
 ### if the Question is to print the unique value
 ```java
 package coreJavaPractice;
