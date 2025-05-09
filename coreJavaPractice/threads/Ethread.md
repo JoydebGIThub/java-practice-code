@@ -1,17 +1,15 @@
 # Thread
-```
-    1. We extends the Thread class to override the run method to use the thread in our code.
-    2. We create the instance of the class which extends the Thread class.
-    3. using .start() method we start the thread.
-    4. For starting the thread the run method must be present in the thread class
-    5. Thread share same memory space
-```
+1. We extends the Thread class to override the run method to use the thread in our code.
+2. We create the **instance of the class** which **extends the Thread class**.
+3. using **start()** method we start the thread.
+4. For starting the thread the run method must be present in the thread class
+5. Thread **share same memory space**.
+
 ***
 ***
 ## Basic Thread using Thread Class:
 
 ```java
-
 package coreJavaPractice.threads;
 
 class MyThread extends Thread{
@@ -34,11 +32,10 @@ Thread is running
 ```
 
 ## Thread Using Runnable interface
-```
-    * Runnable is a interface
-    * Thread Class also implements Runnable
-    * To execute the run method in the implemented Runnable class we need to pass the implemented Runnable class instance in the Thread object as an arguments
-```
+- Runnable is a interface
+- Thread Class also implements Runnable
+- To **execute the run method** in the **implemented Runnable class** we need to pass the **implemented Runnable class instance** in the **Thread object as an arguments**
+    
 ```java
 package coreJavaPractice.threads;
 class MyThreadRunnable implements Runnable{
@@ -97,25 +94,20 @@ Thread-1 is running
 ```
 
 #### Explanation:
-```
-    * Everytime the Output will be different.
-
- Thread t = new Thread(new MultiThread(), "Thread-"+i); 
-    * By using this we can send a string so that we can get the current thread name
-
-Thread.currentThread().getName()
-    * By using this we can print that String name 
-```
+- Everytime the Output will be different.
+  - Thread t = new Thread(new MultiThread(), "Thread-"+i);
+- By using this we can send a string so that we can get the current thread name
+  - Thread.currentThread().getName()
+- By using this we can print that String name 
 
 ## Thread Sleep
-```
-    1. The .sleep() method in Java is used with threads to pause the execution of the current thread for a specific amount of time.
-    2. When Thread.sleep(time) is called, it pauses the execution of the current thread for the specified number of milliseconds (and optionally nanoseconds).
-    3. The thread goes into a "Timed Waiting" state.
-    4. After the sleep time has elapsed, the thread becomes Runnable again and waits for the CPU to schedule it.
-    5. Thread.sleep() does not release locks it holds.
-    6. It throws an InterruptedException, which must be handled using a try-catch block.
-```
+1. The **.sleep() method** in Java is used with threads to **pause the execution** of the **current thread** for a specific amount of time.
+2. When **Thread.sleep(time)** is called, it pauses the execution of the **current thread for the specified number of milliseconds** (and optionally nanoseconds).
+3. The thread goes into a "**Timed Waiting**" state.
+4. After the sleep time has elapsed, the thread becomes Runnable again and waits for the CPU to schedule it.
+5. Thread.sleep() **does not release locks** it holds.
+6. It throws an **InterruptedException**, which must be handled using a try-catch block.
+
 ***
 ```java
 package coreJavaPractice.threads;
@@ -191,11 +183,8 @@ public class Ethread5 {
 
 ```
 ### Output:
-```
-If we run the above code without .join() then after t1 run for sometimes t2 execution will start without even completed the t1 and vice versa
-
-But when we use t1.join(), t2 will wait for t1 to finish
-```
+- If we run the above code **without .join()** then after **t1 run for sometimes t2 execution will start** without even completed the t1 and vice versa
+But when we use **t1.join()**, t2 will wait for t1 to finish
 
 ## Thread Synchronization
 ```java
@@ -239,19 +228,15 @@ public class Ethread6 {
 
 ```
 #### Explanation:
-```
-    1. when multiple threads access shared resource like "*printTable method*" its possible for data correcption or other problems to occure.
-    This is known as a **race condition**.
-    2. To prevent race condition to avoid we use "synchronize access" to shared resources.
-    3. When we declared a method as "synchronized", only one thread can execute that method on a given object "at a time".
-    
-```
+1. when **multiple threads access shared resource** like "**printTable method**" its possible for **data correcption** or other problems to occure. This is known as a **race condition**.
+2. To prevent **race condition**, we use "**synchronize access**" to **shared resources**.
+3. When we declared a method as "**synchronized**", **only one thread** can execute that method on a given object "**at a time**".
+
 ***
 
 ## Deadlock
-```
-    1. Deadlock is a situation where two or more "threads" are blocked indefinitely, waiting for each other to "release" thre resources that they need.
-```
+- **Deadlock** is a situation where **two or more "threads"** are blocked **indefinitely**, waiting for each other to "**release**" there resources that they need.
+
 ```java
 
 package coreJavaPractice.threads;
@@ -303,13 +288,12 @@ Thread 1 locked recource 2
 ```
 
 ## ExecutorService (Thread Pool)
-```
-    1. The ExecutorService in Java is a framework provided by the java.util.concurrent package that simplifies the process of executing tasks asynchronously using a thread pool. Instead of manually managing threads, you can submit tasks to an ExecutorService, which handles thread lifecycle and queuing efficiently.
-    2. Manages a pool of threads efficiently.
-    3. Avoids thread creation overhead for each task.
-    4. Supports task scheduling and lifecycle management.
-    5. Helps avoid resource leaks by properly shutting down threads.
-```
+1. The **ExecutorService** in Java is a **framework** provided by the **java.util.concurrent** package that simplifies the process of **executing tasks asynchronously using a thread pool**. Instead of manually managing threads, you can submit tasks to an ExecutorService, which handles thread lifecycle and queuing efficiently.
+2. Manages a pool of threads efficiently.
+3. Avoids thread creation overhead for each task.
+4. Supports task scheduling and lifecycle management.
+5. Helps avoid resource leaks by properly shutting down threads.
+
 
 ```java
 package coreJavaPractice.threads;
