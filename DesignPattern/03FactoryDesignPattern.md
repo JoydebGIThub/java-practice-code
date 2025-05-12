@@ -1,4 +1,4 @@
-## Factory Design pattern:
+## Factory Design pattern / Factory Method Design pattern:
 - When there is **superclass** and **multiple subclasses** and we want to get **object of the subClasses** based on input and requirement.
 - Then we create **factory class** which takes the **responsibility of creating object of class based on input**.
 
