@@ -120,5 +120,168 @@ Exception in thread "main" java.lang.NoSuchMethodException: Samosa.<init>()
 	at Main.main(Main.java:9)
 ```
 
+*******************************************************************************************
+## 2nd way to break the singleton:
+- using **deserialization**:
+```java
+import java.io.*;
+class Main {
+    public static void main(String[] args) throws Exception {
 
+        Samosa samosa1 = Samosa.getSamosa();
+        System.out.println(samosa1.hashCode());
+        
+        Samosa samosa2= Samosa.getSamosa();
+        ObjectOutputStream oop= new ObjectOutputStream(new FileOutputStream("abc.op"));
+        oop.writeObject(samosa2);
+        System.out.println("Serialization done...");
+        
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("abc.op"));
+        Samosa s2= (Samosa) ois.readObject();
+        System.out.println(s2.hashCode());
+    }
+}
+class Samosa implements Serializable{
+    private static Samosa samosa;
+    private Samosa(){
+        System.out.println("Samosa");
+    }
+    public static Samosa getSamosa(){
+        if(samosa == null){
+            samosa = new Samosa();
+        }
+        return samosa;
+    }
+}
+```
+### Output:
+```
+Samosa
+705927765
+Serialization done...
+812265671
+```
+
+## To prevent it:
+- implementing the **readResolve method**
+- after **deserialization** it give the same object
+```java
+import java.io.*;
+class Main {
+    public static void main(String[] args) throws Exception {
+
+        Samosa samosa1 = Samosa.getSamosa();
+        System.out.println(samosa1.hashCode());
+        
+        Samosa samosa2= Samosa.getSamosa();
+        ObjectOutputStream oop= new ObjectOutputStream(new FileOutputStream("abc.op"));
+        oop.writeObject(samosa2);
+        System.out.println("Serialization done...");
+        
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("abc.op"));
+        Samosa s2= (Samosa) ois.readObject();
+        System.out.println(s2.hashCode());
+    }
+}
+class Samosa implements Serializable{
+    private static Samosa samosa;
+    private Samosa(){
+        System.out.println("Samosa");
+    }
+    public static Samosa getSamosa(){
+        if(samosa == null){
+            samosa = new Samosa();
+        }
+        return samosa;
+    }   
+    public Object readResolve(){
+        return samosa;
+    }
+}
+
+```
+### Output:
+```
+Samosa
+705927765
+Serialization done...
+705927765
+```
+***********************************************************
+## 3rd way to break the singleton:
+- using **cloning**:
+```java
+import java.io.*;
+class Main {
+    public static void main(String[] args) throws Exception, CloneNotSupportedException {
+
+        Samosa samosa1 = Samosa.getSamosa();
+        System.out.println(samosa1.hashCode());
+        
+        Samosa samosa2= (Samosa) samosa1.clone();
+        System.out.println(samosa2.hashCode());
+    }
+}
+class Samosa implements Serializable, Cloneable{
+    private static Samosa samosa;
+    private Samosa(){
+        System.out.println("Samosa");
+    }
+    public static Samosa getSamosa(){
+        if(samosa == null){
+            samosa = new Samosa();
+        }
+        return samosa;
+    }
+    @Override
+    public Object clone() throws CloneNotSupportedException{
+        return super.clone();
+    }
+}
+
+```
+### Output:
+```
+Samosa
+705927765
+366712642
+```
+
+## To prevent it:
+```java
+import java.io.*;
+class Main {
+    public static void main(String[] args) throws Exception, CloneNotSupportedException {
+
+        Samosa samosa1 = Samosa.getSamosa();
+        System.out.println(samosa1.hashCode());
+        
+        Samosa samosa2= (Samosa) samosa1.clone();
+        System.out.println(samosa2.hashCode());
+    }
+}
+class Samosa implements Serializable, Cloneable{
+    private static Samosa samosa;
+    private Samosa(){
+        System.out.println("Samosa");
+    }
+    public static Samosa getSamosa(){
+        if(samosa == null){
+            samosa = new Samosa();
+        }
+        return samosa;
+    }
+    @Override
+    public Object clone() throws CloneNotSupportedException{
+        return samosa;
+    }
+}
+
+```
+### Output:
+```
+Samosa
+705927765
+705927765
+```
 
