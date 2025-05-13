@@ -118,7 +118,7 @@ class Main {
 class Jalebi{
     //Egar way of creating singleton object.
     private static Jalebi jalebi = new Jalebi(); // object is already creating here
-    
+    private Jalebi(){}
     public static Jalebi getJalebi(){
         return jalebi;
     }
