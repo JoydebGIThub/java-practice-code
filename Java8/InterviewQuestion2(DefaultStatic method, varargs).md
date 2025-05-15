@@ -1,12 +1,13 @@
 # ✅ When to use Default Method vs Static Method in Interface?
 ## 🎯 Default Method
-- Use default methods when you want to provide a method with a body that can be inherited and overridden by implementing classes.
-- It is meant for "instance behavior".
-- Important: Default methods belong to instance of class, not to the interface.
+- Use default methods when you want to provide a `method with a body` that can be **inherited and overridden** by `implementing classes`.
+- It is meant for "**instance behavior**".
+- **Important**: Default methods belong to `instance of class`, not to the interface.
+
 ## 🎯 Static Method
-- Use static methods when you want utility methods(You can use them again and again in different parts of your program without having to write the same code over and over) inside the interface that are NOT inherited by implementing classes.
-- It is meant for helper behavior or utility functionality.
-- tatic methods can be called only as InterfaceName.methodName(), not from instance.
+- Use static methods when you want `utility methods`(You can use them **again and again in different parts** of your program without having to write the same code over and over) inside the interface that are `NOT inherited by implementing classes`.
+- It is meant for `helper behavior or utility functionality`.
+- static methods can be called only as `InterfaceName.methodName()`, not from instance.
 
 "**Use a default method when you want instance methods that implementing classes can inherit and override.
 Use a static method when you want utility/helper methods related to the interface that are not tied to any instance**"
@@ -18,9 +19,10 @@ Use a static method when you want utility/helper methods related to the interfac
 | Called using?               | Instance or ClassName.super.method() | InterfaceName.methodName() |
 | Purpose                     | Provide default instance behavior | Utility/helper functionality |
 ************************************************************************************************************************************
+
 # What is variable arguments?
 ## ✅ Variable Arguments (Varargs) in Java
-Variable arguments (or varargs) in Java allow you to pass a variable number of arguments to a method. Instead of specifying a fixed number of parameters, you can use varargs to "**pass any number of arguments of the same type**". Varargs makes it easier to work with methods that can accept an arbitrary number of arguments.
+- Variable arguments (or varargs) in Java allow you to `pass a variable number of arguments to a method`. Instead of specifying a `fixed number of parameters`, you can use varargs to "**pass any number of arguments of the same type**". Varargs makes it easier to work with methods that can accept an arbitrary number of arguments.
 ### ✅ Use Case Example:
 ```java
 public class VarargsExample {
