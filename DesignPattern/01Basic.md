@@ -130,3 +130,59 @@ class Jalebi{
 705927765
 705927765
 ```
+
+*************************************************************************************************************************
+```java
+import java.util.*;
+class Main {
+    public static void main(String[] args) {
+        // Singleton s = Singleton.getConstructor();
+        // System.out.println(s.hashCode());
+        // Singleton s2 = Singleton.getConstructor();
+        // System.out.println(s2.hashCode());
+        
+        Thread t1 = new Thread(()->{
+            Singleton s = Singleton.getConstructor();
+            System.out.println(s.hashCode());
+        });
+        Thread t2 = new Thread(()->{
+            Singleton s2 = Singleton.getConstructor();
+            System.out.println(s2.hashCode());
+        });
+        
+        t1.start();
+        t2.start();
+    }
+}
+class Singleton{
+    private static Singleton instance;
+    private Singleton(){
+        System.out.println("Singleton");
+    }
+    
+    // public static Singleton getConstructor(){
+    //     if(instance == null){
+    //         instance = new Singleton();
+    //     }
+    //     return instance;
+    // }
+    
+    // public synchronized static Singleton getConstructor(){
+    //     if(instance == null){
+    //         instance = new Singleton();
+    //     }
+    //     return instance;
+    // }
+    
+    public static Singleton getConstructor(){
+        if(instance == null){
+            synchronized(Singleton.class){
+                if(instance == null){
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
+}
+```
