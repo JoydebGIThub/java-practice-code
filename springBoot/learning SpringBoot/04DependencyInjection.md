@@ -44,3 +44,154 @@ public class User{
 }
 ```
 **If we inject the dependency throw spring then it will working fine but when we just create a normal User object and call the process then the order will give the NullPointerException**
+
+### Setter Injection
+```java
+@Component
+public class User{
+Order order;
+
+  public User(){
+    System.out.println("Initializing User")
+  }
+
+  @Autowired
+  public void setOrder(Order order){
+    this.order= order;
+  }
+}
+```
+
+#### Advantages:
+- Dependency can be changes any time after object creation
+- Easy for junit testing, we can pass mock objects in dependency easily
+
+#### Disadvantages:
+- field cann't be marked as final
+- difficult to read and maintain, as per standards.
+
+### Constructor Injection
+- Dependency will be resolved at the time of initialization of object.
+- When there is inly one constructor is present `@Autowired` is not mandatory
+```java
+@Component
+public class User{
+  Order order;
+  @Autowired
+  public User(Order order){
+    this.order= order;
+    System.out.println("Initializing User")
+  }
+}
+```
+
+#### Advantages:
+- All mandatory dependencies will be injected at the time of initialization itself;
+- Makes 100% sure that our object will be initialized with all the required dependency
+- Avoids NPE
+- We can create immutable object using constructor injection
+- Fail Fast - Fail at compilation only in case of missing dependencies.
+```java
+@Component
+public class User{
+  final Order order;
+  @Autowired
+  public User(Order order){
+    this.order= order;
+    System.out.println("Initializing User")
+  }
+}
+```
+********************************************************************************************************
+## Problem faced during DI
+- Circular Dependency
+```java
+@Component
+public class User{
+  final Order order;
+  @Autowired
+  public User(Order order){
+    this.order= order;
+    System.out.println("Initializing User")
+  }
+}
+
+@Component
+public class Order{
+  User user;
+  @Autowired
+  public Order(User user){
+    this.user= user;
+    System.out.println("Initializing Order")
+  }
+}
+```
+- here `Order` is depending on `User` and `User` is depending on `Order`.
+
+### To resolve the issue we can use @Lasy Annotation
+```java
+@Component
+public class Order{
+  User user;
+  @Autowired
+  @Lazy
+  public Order(User user){
+    this.user= user;
+    System.out.println("Initializing Order")
+  }
+}
+```
+
+### To resolve the issue we also can use @PostConstruct annotation
+```java
+@Component
+public class User{
+  @Autowired
+  Order order;
+  
+  public User(Order order){
+    this.order= order;
+    System.out.println("Initializing User")
+  }
+
+  @PostConstruct
+  public void init(){
+    order.setOrder(this);
+  }
+  
+}
+
+@Component
+public class Order{
+  User user;
+  public Order(){
+    System.out.println("Initializing Order")
+  }
+  public void setOrder(User user){
+    this.user = user;
+  }
+}
+```
+- Unsatisfied dependency
+  - When a `interface` is implemented by 2 classes and when we take that `interface` as a type for a reference then JVM will be confused to which class `Bean` should be used thats why its called `Unsatisfied dependency`.
+  - So to resolve we can mark one of the class/component as `@Primary`
+  - We also can use `@Qualifier` to use the perticular component.
+```java
+@Component
+public class User{
+  Order order;
+
+  @Autowired
+  public User(@Qualifier("onlineOrder") Order order){
+    this.order= order;
+    System.out.println("Initializing User")
+  }
+}
+```
+
+
+
+
+
+
+
