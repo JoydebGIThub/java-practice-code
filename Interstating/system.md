@@ -44,6 +44,14 @@ class Main {
     }
 }
 ```
+##### Explanation:
+- int a = sc.nextInt();
+  - Reads an integer from the user and stores it in the variable a.
+  - **Important Note**: After this, the **newline character (\n)** from pressing Enter is **not consumed**, which can cause issues in reading strings afterward.
+- sc.nextLine();
+  - This line consumes the **leftover newline character** from the previous `nextInt()` call.
+  - Without this, the next `sc.nextLine()` would immediately **return an empty string**.
+
 "**System.in is an InputStream object (reads bytes; Scanner wraps it to make it easier).**"
 3. Error Output (System.err)
 ```java
