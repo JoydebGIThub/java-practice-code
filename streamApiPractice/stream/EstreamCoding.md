@@ -184,6 +184,34 @@ class Main {
 }
 ```
 
+## Find the first non-repetitive character
+```java
+import java.util.stream.Collectors;
+import java.util.function.Function;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+public class Test {
+	public static void main(String[] args) {
+        String str = "I love Java i am a good boy";
+        String str2 = str.toLowerCase();
+
+        System.out.println(str2.chars().mapToObj(c -> (char) c)
+            .collect(Collectors.groupingBy(
+                    Function.indentity(),
+                    LinkedHashMap::new,
+                    Collectors.counting()
+                ))
+            .entrySet().stream()
+            .filter(entry -> entry.getValue() == 1)
+            .map(Map.Entry::getKey)
+            .findFirst()
+            .get()
+        );
+    }
+}
+
+```
 
 
 
